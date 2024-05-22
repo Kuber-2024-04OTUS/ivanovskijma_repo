@@ -1,0 +1,103 @@
+# global:
+#   dnsService: "coredns"
+loki:
+  # useTestSchema: true
+  schemaConfig:
+    configs:
+      - from: 2024-04-01
+        object_store: s3
+        store: tsdb
+        schema: v13
+        index:
+          prefix: loki_index_
+          period: 24h
+  auth_enabled: false
+  storage:
+    bucketNames:
+      chunks: chunks
+      ruler: ruler
+      admin: admin
+    type: s3
+    s3:
+      endpoint: storage.yandexcloud.net
+      region: ""
+      secretAccessKey: ""
+      accessKeyId: ""
+      s3ForcePathStyle: false
+      insecure: false
+gateway:
+  nodeSelector: 
+    node-role: infra
+  tolerations:
+  - key: "node-role"
+    operator: "Equal"
+    value: "infra"
+    effect: "NoSchedule"
+write:
+  nodeSelector: 
+    node-role: infra
+  tolerations:
+  - key: "node-role"
+    operator: "Equal"
+    value: "infra"
+    effect: "NoSchedule"
+  replicas: 2
+  persistence:
+    storageClass: csi-s3
+read:
+  nodeSelector: 
+    node-role: infra
+  tolerations:
+  - key: "node-role"
+    operator: "Equal"
+    value: "infra"
+    effect: "NoSchedule"
+  replicas: 2
+backend:
+  nodeSelector: 
+    node-role: infra
+  tolerations:
+  - key: "node-role"
+    operator: "Equal"
+    value: "infra"
+    effect: "NoSchedule"
+  replicas: 2
+  persistence:
+    storageClass: csi-s3
+lokiCanary:
+  tolerations:
+  - key: "node-role"
+    operator: "Equal"
+    value: "infra"
+    effect: "NoSchedule"
+  - key: "node-role.kubernetes.io/control-plane"
+    operator: "Exists"
+    effect: "NoSchedule"
+adminApi:
+  nodeSelector: 
+    node-role: infra
+  tolerations:
+  - key: "node-role"
+    operator: "Equal"
+    value: "infra"
+    effect: "NoSchedule"
+  replicas: 1
+chunksCache:
+  nodeSelector: 
+    node-role: infra
+  tolerations:
+  - key: "node-role"
+    operator: "Equal"
+    value: "infra"
+    effect: "NoSchedule"
+  allocatedMemory: 4092
+  # replicas: 1
+resultsCache:
+  nodeSelector: 
+    node-role: infra
+  tolerations:
+  - key: "node-role"
+    operator: "Equal"
+    value: "infra"
+    effect: "NoSchedule"
+  # replicas: 1

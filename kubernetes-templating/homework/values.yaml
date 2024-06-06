@@ -1,0 +1,22 @@
+replicaCount: 3
+maxUnavailable: 1
+
+
+image:
+  repository: nginx
+  tag: latest
+
+imageInit:
+  repository: busybox
+  tag: 1.31
+
+readinessProbe:
+  initialDelaySeconds: 5
+
+sourcePort: 80
+targetPort: 8000
+
+nginxPort: 80
+
+
+
